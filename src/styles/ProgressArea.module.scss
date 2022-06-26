@@ -1,0 +1,47 @@
+.progress_area{
+    height: 6px;
+    width: 100%;
+    border-radius: 50px;
+    background: #9b9a9acc;
+    cursor: pointer;
+    margin-top: 1rem;
+    
+    .progress_bar{
+        height: inherit;
+        position: relative;
+        border-radius: inherit;
+        background: linear-gradient(90deg, #0c73fa 60%, #013c5e 100%);
+        
+        &::before{
+            content: "";
+            height: 12px;
+            width: 12px;
+            border-radius: 50%;
+            background: #0c73fa;
+            opacity: 0;
+            
+            position: absolute;
+            top: 50%;
+            right: -5px;
+            z-index: 2;
+            pointer-events: none;
+            transform: translateY(-50%);
+            transition: opacity 0.2s ease;
+        }
+    }
+    
+    &:hover .progress_bar::before{
+        opacity: 1;
+        pointer-events: auto;
+    }
+    .song_timer{
+        margin-top: 0.4rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        span{
+            font-size: 13px;
+        }
+    }
+}

@@ -1,0 +1,30 @@
+.container {
+  padding: 0 2rem;
+  
+  .main {
+    min-height: 100vh;
+    display: flex;
+    
+    .grid {
+      width: 100%;
+      min-height: 100%;
+      padding: 3rem 0;
+      display: grid;
+      grid-template: repeat(3, auto) / repeat(4,1fr);
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+  }
+}
+
+.logo {
+  height: 1em;
+  margin-left: 0.5rem;
+}
+
+@media (max-width: 600px) {
+  .grid {
+    width: 100%;
+    flex-direction: column;
+  }
+}
