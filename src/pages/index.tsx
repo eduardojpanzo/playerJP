@@ -8,21 +8,11 @@ type ArtistData = {
   picture_medium:string
 }
 
-type MusicData = {
-  id:number;
-  name:string;
-  artist:ArtistData;
-  img:string;
-  src:string;
-}
-
 interface HomepageProps{
-  musics: MusicData[];
   artists:ArtistData[]
 }
 
-const Home = ({artists,musics}:HomepageProps) => {
-  console.log(artists);
+const Home = ({artists}:HomepageProps) => {
   return (
     <div className={styles.container}>
       <main className={styles.main}>

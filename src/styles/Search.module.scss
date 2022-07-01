@@ -45,7 +45,45 @@
     }
     .foundContainer{
         min-height: calc(100vh - 246px);
-        text-align: center;
-        background-color: aqua;
+
+        .grid {
+            width: 100%;
+            min-height: 100%;
+            padding: 3rem 0;
+            display: grid;
+            grid-template: repeat(3, auto) / repeat(4,1fr);
+            justify-content: center;
+            flex-wrap: wrap;
+          }
+
+          .buttons{
+            
+            button{
+                width:65px;
+                height: 65px;
+                border-radius: 65px;
+                border:1px solid #0070f3;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                cursor: pointer;
+                transition: all ease 0.5s;
+                
+                position: fixed;
+                top: 50%;
+                
+                &:hover{
+                    border:1px solid transparent;
+                }
+            }
+
+            .btn_prev{
+                left: 5%;
+            }
+            .btn_next{
+                right: 5%;
+            }
+
+          }
     }
 }

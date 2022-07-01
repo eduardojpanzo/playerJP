@@ -19,7 +19,6 @@ export const ArtistCard = ({artist}:ArtistCardProps) =>{
             </div>
             <div className={styles.artistInfo}>
                 <p>{artist.name}</p>
-                {/* <span>{artist.name}</span> */}
             </div>
             <Link href={`/playlist/${artist.id}`}>
                 Go to music
