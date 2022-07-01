@@ -1,0 +1,51 @@
+.container{
+    margin: 0 auto;
+    max-width: 1024px;
+
+    .searchContainer{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100px;
+        padding:0 2rem;
+
+
+        .searchInput{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap:0.4rem;
+            padding: 0.4rem;
+            border-radius: 4px;
+            overflow: hidden;
+            background-color: #ccc;
+            
+            select,input{
+            background: transparent;
+            border: none;
+            outline: none;
+            }
+        
+            select{
+            appearance: none;
+            text-align: center;
+            }
+            input{
+            border-radius: 4px;
+            width: 300px;
+            padding: 0.7rem;
+            font-weight: bold;
+            }
+        
+            &:hover > input,
+            input:focus{
+            background-color: rgba(204, 221, 204, 0.459);
+            }
+        }
+    }
+    .foundContainer{
+        min-height: calc(100vh - 246px);
+        text-align: center;
+        background-color: aqua;
+    }
+}

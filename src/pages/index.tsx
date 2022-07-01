@@ -1,28 +1,35 @@
 import { GetServerSideProps } from 'next';
-import { MusicCard } from '../components/MusicCard';
+import { ArtistCard } from '../components/ArtistCard';
 import styles from '../styles/Home.module.scss'
 
-type Data = {
+type ArtistData = {
+  id:number,
+  name:string,
+  picture_medium:string
+}
+
+type MusicData = {
   id:number;
   name:string;
-  artist:string;
+  artist:ArtistData;
   img:string;
   src:string;
 }
 
 interface HomepageProps{
-  musics: Data[];
+  musics: MusicData[];
+  artists:ArtistData[]
 }
 
-const Home = ({musics}:HomepageProps) => {
-
+const Home = ({artists,musics}:HomepageProps) => {
+  console.log(artists);
   return (
     <div className={styles.container}>
       <main className={styles.main}>
 
         <div className={styles.grid}>
-          {musics.map(music=>(
-            <MusicCard key={music.id} music={music}/>
+          {artists.map(artist=>(
+            <ArtistCard key={artist.id} artist={artist}/>
           ))}
         </div>
       </main>
@@ -33,13 +40,12 @@ const Home = ({musics}:HomepageProps) => {
 export default Home
 
 export const getServerSideProps: GetServerSideProps = async () =>{
-  const res = await fetch(`http://localhost:3000/api/music`);
-
-  const data = await res.json();
+  const res = await fetch(`http://localhost:3000/api/trending`);
+  const json = await res.json();
 
   return{
       props:{
-          musics:data
+          artists:json.list.data,
       }
   }
 }
