@@ -1,16 +1,29 @@
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
-import MusicList from '../../components/MusicList';
+import { GetServerSideProps, GetStaticProps } from 'next';
+import { ChangeEvent, ContextType, useEffect, useRef, useState } from 'react';
+import {SongsList} from '../../components/SongsList';
 import { Player } from '../../components/Player';
 import { ProgressArea } from '../../components/ProgressArea';
 
-import styles from '../../styles/Music.module.scss';
+import styles from '../../styles/MusicPlayer.module.scss';
 
-type SongProps = {
+type ArtistData = {
   id:number;
   name:string;
-  artist:string;
-  img:string;
-  src:string;
+  picture_medium:string;
+}
+type AlbumProps ={
+  id:number;
+  title:string;
+  cover:string;
+}
+
+type SongProps = {
+  album:AlbumProps;
+  artist:ArtistData;
+  duration:string;
+  id:number;
+  preview:string;
+  title:string;
 }
 
 interface MyProps{
@@ -22,19 +35,15 @@ type TimeSong = {
   duraction:number
 }
 
-const Music = ({musics}:MyProps) => {
+const MusicPlayer = ({musics}:MyProps) => {
+  console.log(musics);
+  
   const mainAudio = useRef<HTMLAudioElement>(null);
 
   const [songIndex, setSongIndex] = useState<number>(0);
   const [currentSong, setCurrentSong] = useState<SongProps>(musics[songIndex]);
-
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
-
   const [timeSong,setTimeSong] = useState<TimeSong>({currentTime:0,duraction:0})
-
-    /* const router = useRouter();
-    const {musicId} = router.query; */
-
 
   //sempre controlará se está ou não a tocar...
   useEffect(()=>{
@@ -44,17 +53,13 @@ const Music = ({musics}:MyProps) => {
       PauseSong();
     }
   },[isPlaying])
-  
+
   function getCurrentTimeAndDuration(audioElement:HTMLAudioElement) {
     const currentTime = audioElement.currentTime;
     const duraction = audioElement.duration;
 
     return{currentTime,duraction}
   }
-
-/*   function changeProgressBar() {
-    mainAudio.current?.currentTime = 100 * timeSong.duraction;
-  } */
 
   const onPlaying = (event:ChangeEvent<HTMLAudioElement>) => {
     setTimeSong(getCurrentTimeAndDuration(event.target))
@@ -90,22 +95,23 @@ const Music = ({musics}:MyProps) => {
     }
   }
 
+
   return (
     <div className={styles.music_container}>
       <div className={styles.wrapper}>
         
         <div className={styles.image_area}>
-            <img src={currentSong.img} alt={currentSong.name} />
+            <img src={currentSong.album.cover} alt={currentSong.album.title} />
         </div>
 
         <div className={styles.song_details}>
-            <p className={styles.name}>{currentSong.name}</p>
-            <p className={styles.artist}>{currentSong.artist}</p>
+            <p className={styles.name}>{currentSong.title}</p>
+            <p className={styles.artist}>{currentSong.artist.name}</p>
         </div>
 
         <ProgressArea 
           timeSong={timeSong}
-          songSrc={currentSong.src}
+          songSrc={currentSong.preview}
           audio={mainAudio}
           onPlaying={onPlaying}
         />
@@ -119,21 +125,22 @@ const Music = ({musics}:MyProps) => {
 
       </div>
 
-      <MusicList music={currentSong}/>
+      {/* <SongsList songs={musics}/> */}
     </div>
   )
+
 }
 
-export default Music
+export default MusicPlayer
 
-export const getServerSideProps = async () =>{
-    const res = await fetch(`http://localhost:3000/api/music`);
-  
-    const data = await res.json();
-  
+  export const getServerSideProps: GetServerSideProps = async (context) =>{
+    const res = await fetch(`http://localhost:3000/api/songs?q=${context.params?.id}`);
+
+    const json = await res.json();
+
     return{
-        props:{
-            musics:data
-        }
+      props:{
+          musics:json.list.data
     }
   }
+}

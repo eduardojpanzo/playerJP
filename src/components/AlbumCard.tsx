@@ -28,7 +28,7 @@ export const AlbumCard = ({album}:ArtistCardProps) =>{
                 <p>{album.title}</p>
                 <span>{album.artist.name}</span>
             </div>
-            <Link href={`/playlist/${album.artist.id}`}>
+            <Link href={`/musicplayer/${album.artist.id}`}>
                 Go to music
             </Link>
         </div>

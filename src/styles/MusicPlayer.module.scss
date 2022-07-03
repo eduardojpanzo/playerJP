@@ -1,13 +1,12 @@
 .music_container{
     position: relative;
-    min-height: 50vh;
+    min-height: calc(100vh - 146px);
     padding: 1rem;
 
     display: flex;
     justify-content: center;
-    align-items: center;
 
-    background-color: aquamarine;
+    background-color: #0071f342;
 
     .wrapper{
         max-width: 800px;

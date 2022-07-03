@@ -41,6 +41,12 @@
             input:focus{
             background-color: rgba(204, 221, 204, 0.459);
             }
+
+            button{
+                font-size: 2rem;
+                background-color: transparent;
+                border:none;
+            }
         }
     }
     .foundContainer{
