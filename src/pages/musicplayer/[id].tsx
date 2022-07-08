@@ -5,6 +5,7 @@ import { Player } from '../../components/Player';
 import { ProgressArea } from '../../components/ProgressArea';
 
 import styles from '../../styles/MusicPlayer.module.scss';
+import { MdPlaylistPlay } from 'react-icons/md';
 
 type ArtistData = {
   id:number;
@@ -31,19 +32,20 @@ interface MyProps{
 }
 
 type TimeSong = {
-  currentTime: number;
-  duraction:number
+  currentTime: number | undefined;
+  duraction:number | undefined;
 }
 
-const MusicPlayer = ({musics}:MyProps) => {
-  console.log(musics);
-  
-  const mainAudio = useRef<HTMLAudioElement>(null);
+const MusicPlayer = ({musics}:MyProps) => {   
+  const audioElement = useRef<HTMLAudioElement>(null);
 
-  const [songIndex, setSongIndex] = useState<number>(0);
-  const [currentSong, setCurrentSong] = useState<SongProps>(musics[songIndex]);
+  const [currentSong, setCurrentSong] = useState<SongProps>(musics[0]);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
-  const [timeSong,setTimeSong] = useState<TimeSong>({currentTime:0,duraction:0})
+
+  const [currentTime,setCurrentTime] = useState<number>(0)
+  const [songDuration,setSongDuration] = useState<number>(0)
+
+  const [isShow, setIsShow] = useState<boolean>(false);
 
   //sempre controlará se está ou não a tocar...
   useEffect(()=>{
@@ -54,15 +56,11 @@ const MusicPlayer = ({musics}:MyProps) => {
     }
   },[isPlaying])
 
-  function getCurrentTimeAndDuration(audioElement:HTMLAudioElement) {
-    const currentTime = audioElement.currentTime;
-    const duraction = audioElement.duration;
-
-    return{currentTime,duraction}
-  }
-
-  const onPlaying = (event:ChangeEvent<HTMLAudioElement>) => {
-    setTimeSong(getCurrentTimeAndDuration(event.target))
+  const onPlaying = () => {
+    const currentTime = audioElement.current?.currentTime;
+    const songDuration = audioElement.current?.duration;
+    setCurrentTime(currentTime!);
+    setSongDuration(songDuration!)
   }
 
   function handleChangePlayPause() {
@@ -70,29 +68,33 @@ const MusicPlayer = ({musics}:MyProps) => {
   }
 
   const PlaySong = ()=>{
-    mainAudio.current?.play();
+    audioElement.current?.play();
   }
   
   const PauseSong = ()=>{
-    mainAudio.current?.pause();
+    audioElement.current?.pause();
   }
 
-  const handleNextSong = ()=>{
+  const handlePrevSong = ()=>{
     const index = musics.findIndex(music=>music.id === currentSong.id);
-    if (index == 0) {
+    if (index === 0) {
       setCurrentSong(musics[musics.length -1]);
     } else{
       setCurrentSong(musics[index -1]);
     }
-  }
 
-  const handlePrevtSong = ()=>{
+    setIsPlaying(true)
+  }
+  
+  const handleNextSong = ()=>{
     const index = musics.findIndex(music=>music.id === currentSong.id);
-    if (index === musics.length) {
+    if (index === (musics.length - 1)) {
       setCurrentSong(musics[0]);
     } else{
       setCurrentSong(musics[index + 1]);
     }
+    
+    setIsPlaying(true)
   }
 
 
@@ -110,22 +112,29 @@ const MusicPlayer = ({musics}:MyProps) => {
         </div>
 
         <ProgressArea 
-          timeSong={timeSong}
-          songSrc={currentSong.preview}
-          audio={mainAudio}
-          onPlaying={onPlaying}
+          currentTime={currentTime}
+          duractionSong={Number(currentSong.duration)}
+        />
+
+        <audio 
+          src={currentSong.preview}
+          ref={audioElement}
+          onTimeUpdate={onPlaying}
         />
 
         <Player
           isPlaying={isPlaying}
           onPlayPauseSong={handleChangePlayPause}
           onNextSong={handleNextSong}
-          onPrevSong={handlePrevtSong}
+          onPrevSong={handlePrevSong}
         />
 
       </div>
 
-      {/* <SongsList songs={musics}/> */}
+      <div className={styles.showPlayList} onClick={()=>setIsShow(!isShow)}>
+        <MdPlaylistPlay/>
+      </div>
+      <SongsList isShow={isShow} songs={musics}/>
     </div>
   )
 

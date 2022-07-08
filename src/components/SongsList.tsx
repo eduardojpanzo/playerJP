@@ -1,4 +1,4 @@
-import styles from '../styles/SongsList.module.scss'
+import styles from '../styles/SongsListList.module.scss'
 
 type ArtistData = {
     id:number;
@@ -20,21 +20,19 @@ type SongProps = {
 }
   
 interface SongsListProps{
-    songs:SongProps[]
+    songs:SongProps[],
+    isShow:boolean,
 }
 
-export function SongsList({songs}:SongsListProps) {
+export function SongsList({songs,isShow}:SongsListProps) {
     return ( 
-        <div className={styles.music_list}>
-            
-            <div className={styles.header}>
-                <div className={styles.row}>
-                    <i className="list material-icons">queue_music</i>
-                    <span>Music list</span>
-                </div>
-                <i id="close" className="material-icons">close</i>
-            </div>
-
+        <div 
+            className={styles.music_list}
+            style={{
+                right:isShow?'0':'-300px',
+                display:isShow?'block':'none'
+            }}
+        >
             <ul>
                 {songs.map(song=>(
                     <li li-index={song.id + 1}>

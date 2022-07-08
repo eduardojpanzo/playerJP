@@ -1,11 +1,11 @@
 .music_list{
-    display: none;
+    display: block;
     position: absolute;
     background: #fff;
     width: 300px;
     right: -300px;
-    top: 0;
-    opacity: 0;
+    top: 60px;
+    opacity: 1;
     pointer-events: none;
     z-index: 5;
     padding: 15px 20px;
@@ -33,7 +33,7 @@
     ul{
         margin: 10px 0;
         max-height: 260px;
-        overflow: auto;
+        overflow: scroll;
     }
     ul li{
         list-style: none;

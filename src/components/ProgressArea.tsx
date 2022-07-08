@@ -2,49 +2,45 @@ import { ChangeEvent, MouseEvent, RefObject, useEffect, useRef, useState } from 
 import styles from '../styles/ProgressArea.module.scss';
 
 interface ProgressAreaProps{
-    timeSong:{
-        currentTime:number,
-        duraction:number
-    },
-    songSrc :string,
-    audio:RefObject<HTMLAudioElement>,
-    onPlaying:(event:ChangeEvent<HTMLAudioElement>)=>void
+    currentTime:number,
+    duractionSong:number
 }
 
-export function ProgressArea({timeSong,songSrc, audio,onPlaying}:ProgressAreaProps){
+export function ProgressArea({currentTime, duractionSong}:ProgressAreaProps){
     const mainBar = useRef<HTMLDivElement>(null);
 
+
     //const [progress, setProgress]  = useState(0);
-    const [duration, setDuration] = useState("");
-    const [currentTime, setCurrentTime] = useState("0:00");
     const [progresswidth, setProgresswidth] = useState<number>(0);
+    const [currentTimeformatted, setCurrentTimeformatted] = useState('0:00');
+    const [durationformatted, setDurationformatted] = useState('0:00');
 
     useEffect(()=>{
-        modifyCurrentTime();
+        formatCurrentTime();
 
         changeProgressBar();
-    },[timeSong])
+    },[currentTime])
     
     useEffect(()=>{
         modifyDuraction()
-    },[timeSong.duraction])
+    },[duractionSong])
 
-    const modifyCurrentTime = () =>{
-        const totalMin = Math.floor(timeSong.currentTime / 60);
-        const totalSec = Math.floor(timeSong.currentTime % 60);
+    const formatCurrentTime = () =>{
+        const totalMin = Math.floor(currentTime / 60);
+        const totalSec = Math.floor(currentTime % 60);
 
-        setCurrentTime(`${totalMin}:${totalSec}`);
+        setCurrentTimeformatted(`${totalMin}:${totalSec}`);
     }
 
     const modifyDuraction = () =>{
-        const totalMin = Math.floor(timeSong.duraction / 60);
-        const totalSec = Math.floor(timeSong.duraction % 60);
+        const totalMin = Math.floor(duractionSong / 60);
+        const totalSec = Math.floor(duractionSong % 60);
 
-        setDuration(`${totalMin}:${totalSec}`)
+        setDurationformatted(`${totalMin}:${totalSec}`)
     }
 
     function changeProgressBar() {
-        setProgresswidth(timeSong.currentTime / timeSong.duraction * 100);
+        setProgresswidth(currentTime / duractionSong * 100);
         // mainBar.current?.style.setProperty("width",`${progresswidth}%`);
     }
 
@@ -68,15 +64,9 @@ export function ProgressArea({timeSong,songSrc, audio,onPlaying}:ProgressAreaPro
             >
             </div>
 
-            <audio 
-                src={songSrc}
-                ref={audio}
-                onTimeUpdate={onPlaying}
-            />
-
             <div className={styles.song_timer}>
-              <span className={styles.current_time}>{currentTime}</span>
-              <span className={styles.max_duration}>{duration}</span>
+              <span className={styles.current_time}>{currentTimeformatted}</span>
+              <span className={styles.max_duration}>{durationformatted}</span>
             </div>
         </div>
     )
